@@ -31,24 +31,31 @@ int main() {
     // Inicializacion del LCD
     lcd_init();
     // Inicializo ADC
-
+    adc_init();
     // Inicializo GPIO26 como entrada analogica
-
+    adc_gpio_init(26);
     // Selecciono canal analogico
-
+    adc_select_input(0);
     while(true) {
         // Leer NTC
-        
-        // Calculo temperatura
-        
-        // Limpio LCD
-        lcd_clear();
-        // Variable para el string
-        char str[16];
-        // Creo string
-        
-        // Imprimo string en segunda fila
-        lcd_string(str);
+        uint16_t val = adc_read();
+        float V_val = val*3.3/4095;
+        float R_ntc = 4700.0/((3.3/V_val)-1);
+        //pongo la variable del promedio en 0
+        float Ptemp = 0.0;
+        for (int i = 0; i < 11; ++i)
+        {
+           // Calculo temperatura
+            float T = 1 / (log(R_ntc/10000.0)/3900.0+1/298.15);
+            float Temp = T - 273.15;
+            //sumamos las 10 temperaturas
+            Ptemp += Temp
+        }
+        //saco el promedio de las 10 temperaturas leidas
+        Ptemp = Ptemp/10;
+        //imprimo el valor de las variable
+        printf("El valor leido por el ADC es de %d\n", val);
+        printf("La temperatura es de %.2f\n", Ptemp); 
         // Espero 500 ms
         sleep_ms(500);
     }
