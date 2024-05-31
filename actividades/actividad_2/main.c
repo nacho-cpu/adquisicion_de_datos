@@ -9,6 +9,18 @@
  * @brief Programa principal
  */ 
 int main() {
+
+    //configuro el i2c0 a 100Khz
+    i2c_init(i2c0, 100 * 1000);
+    //eligo GP4 como SDA
+    gpio_set_function(4, GPIO_FUNC_I2C);
+    //eligo GP4 como SCL
+    gpio_set_function(5, GPIO_FUNC_I2C);
+    //activo pullups es los gpio
+    gpio_pull_up(4);
+    gpio_pull_up(5);
+
+
     // Habilito USB
     stdio_init_all();
 
